@@ -6,9 +6,11 @@
 \usage{
 hexagon_maze(depth, unit_len, clockwise = TRUE, method = c("two_trapezoids",
   "six_triangles", "three_parallelograms", "random"),
-  start_from = c("midpoint", "corner"), draw_boundary = FALSE,
-  num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL, end_side = 1)
+  start_from = c("midpoint", "corner"), boustro = c(1, 1),
+  draw_boundary = FALSE, num_boundary_holes = 2, boundary_lines = TRUE,
+  boundary_holes = NULL, boundary_hole_color = NULL,
+  boundary_hole_locations = NULL, boundary_hole_arrows = FALSE,
+  end_side = 1)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the
@@ -37,6 +39,19 @@ with two holey lines and one solid line between them.}
 \item{start_from}{whether to start from the midpoint of the first side
 of a maze, or from the corner facing the first side.}
 
+\item{boustro}{an array of two values, which help determine
+the location of holes in internal lines of length
+\code{height}. The default value, \code{c(1,1)} results in 
+uniform selection. Otherwise the location of holes are chosen
+with probability proportional to a beta density with the
+ordered elements of \code{boustro} set as 
+\code{shape1} and \code{shape2}.
+In sub mazes, this parameter is reversed, which
+can lead to \sQuote{boustrophedonic} mazes. It is suggested
+that the sum of values not exceed 40, as otherwise the location 
+of internal holes may be not widely dispersed from the mean
+value.}
+
 \item{draw_boundary}{a boolean indicating whether a final boundary shall be
 drawn around the maze.}
 
@@ -62,6 +77,21 @@ is drawn, no hole can be drawn either.}
 for more details. Can be an array of colors, or colors and the 
 value \code{'clear'}, which stands in for \code{NULL} to
 indicate no filled hole to be drawn.}
+
+\item{boundary_hole_locations}{the \sQuote{locations} of the boundary holes
+within each boundary segment.
+A value of \code{NULL} indicates the code may randomly choose, as is
+the default.
+May be a numeric array. A positive value up to the side length is
+interpreted as the location to place the boundary hole.
+A negative value is interpreted as counting down from the side
+length plus 1. A value of zero corresponds to allowing the 
+code to pick the location within a segment.
+A value of \code{NA} may cause an error.}
+
+\item{boundary_hole_arrows}{a boolean or boolean array indicating whether to draw
+perpendicular double arrows at the boundary holes, as a visual guide. These
+can be useful for locating the entry and exit points of a maze.}
 
 \item{end_side}{the number of the side to end on. A value of
 1 corresponds to the starting side, while higher numbers
@@ -188,7 +218,7 @@ turtle_do({
 		hexagon_maze(depth=depth,unit_len,clockwise=TRUE,method='two_trapezoids',
 		  draw_boundary=TRUE,boundary_holes=holes)
 		turtle_forward(distance=unit_len * num_segs/2)
-		turtle_right(multiplier * 60)
+		turtle_right((multiplier * 60) \%\% 360)
 		turtle_forward(distance=unit_len * num_segs/2)
 	}
 })

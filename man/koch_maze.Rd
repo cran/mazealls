@@ -6,7 +6,8 @@
 \usage{
 koch_maze(depth, unit_len, clockwise = TRUE, draw_boundary = TRUE,
   num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL)
+  boundary_hole_color = NULL, boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE, end_side = 1)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the side length.
@@ -43,6 +44,26 @@ is drawn, no hole can be drawn either.}
 for more details. Can be an array of colors, or colors and the 
 value \code{'clear'}, which stands in for \code{NULL} to
 indicate no filled hole to be drawn.}
+
+\item{boundary_hole_locations}{the \sQuote{locations} of the boundary holes
+within each boundary segment.
+A value of \code{NULL} indicates the code may randomly choose, as is
+the default.
+May be a numeric array. A positive value up to the side length is
+interpreted as the location to place the boundary hole.
+A negative value is interpreted as counting down from the side
+length plus 1. A value of zero corresponds to allowing the 
+code to pick the location within a segment.
+A value of \code{NA} may cause an error.}
+
+\item{boundary_hole_arrows}{a boolean or boolean array indicating whether to draw
+perpendicular double arrows at the boundary holes, as a visual guide. These
+can be useful for locating the entry and exit points of a maze.}
+
+\item{end_side}{the number of the side to end on. A value of
+1 corresponds to the starting side, while higher numbers
+correspond to the drawn side of the figure in the canonical order
+(that is, the order induced by the \code{clockwise} parameter).}
 }
 \value{
 nothing; the function is called for side effects only, though in
@@ -80,7 +101,7 @@ turtle_do({
 	turtle_forward(650)
 	turtle_right(90)
 	turtle_right(30)
-	koch_maze(depth=4,unit_len=15)
+	koch_maze(depth=3,unit_len=14)
 })
 }
 \author{

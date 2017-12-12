@@ -21,60 +21,6 @@
 # Author: Steven E. Pav <shabbychef@gmail.com>
 # Comments: Steven E. Pav
 
-# utilities:
-.maybe_holey_line <- function(unit_len,num_segs,has_hole=TRUE,go_back=FALSE,hole_color=NULL) {
-	if (has_hole) {
-		holey_line(unit_len=unit_len,num_segs=num_segs,go_back=go_back,hole_color=hole_color) 
-	} else {
-		draw_line(distance=(unit_len*num_segs))
-		if (go_back) {
-			turtle_backward(distance=unit_len * num_segs)
-		}
-	}
-}
-.holey_y <- function(unit_len,num_segs) {
-	coinflip <- sample.int(n=2,size=1)
-	.turn_left(60)
-	.maybe_holey_line(unit_len,num_segs,has_hole=coinflip==1,go_back=TRUE)
-	.turn_right(120)
-	.maybe_holey_line(unit_len,num_segs,has_hole=coinflip==2,go_back=TRUE)
-	.turn_left(60)
-}
-
-# draw a \sQuote{bone} shape with holes in it, centered
-# on the turtle in the given direction.
-holey_bone <- function(unit_len,num_segs) {
-	if (num_segs > 0) {
-		coinflip <- sample.int(n=2,size=1)
-		if (coinflip==1) {
-			no_hole_seg <- sample.int(n=4,size=1)
-			# no hole in the center
-			for (jjj in c(0,1)) {
-				draw_line(distance=unit_len * num_segs/2)
-				.turn_left(60)
-				.maybe_holey_line(unit_len,num_segs,has_hole=no_hole_seg != 2*jjj+1,go_back=TRUE)
-				.turn_right(120)
-				.maybe_holey_line(unit_len,num_segs,has_hole=no_hole_seg != 2*jjj+2,go_back=TRUE)
-				.turn_left(60)
-				.turn_left(180)
-				turtle_forward(distance=unit_len * num_segs/2)
-			}
-		} else {
-			# hole in the center
-			turtle_forward(distance=unit_len * num_segs/2)
-			for (jjj in c(0,1)) {
-				.holey_y(unit_len,num_segs)
-				.turn_right(180)
-				turtle_forward(distance=unit_len * num_segs)
-			}
-			.turn_right(180)
-			holey_line(unit_len,num_segs,go_back=TRUE)
-			turtle_forward(distance=unit_len * num_segs/2)
-			.turn_right(180)
-		}
-	}
-}
-
 #' @title iso_trapezoid_maze .
 #'
 #' @description 
@@ -122,7 +68,9 @@ holey_bone <- function(unit_len,num_segs) {
 #' @template param-clockwise
 #' @template param-start-from
 #' @template param-end-side
+#' @template param-boustro
 #' @template param-boundary-stuff
+#' @template param-boundary-hole-controls
 #' @template return-none
 #' @param depth the depth of recursion. This controls the
 #' side length: three sides have \code{round(2^depth)} segments
@@ -158,14 +106,19 @@ holey_bone <- function(unit_len,num_segs) {
 #' turtle_do({
 #' 	len <- 22
 #' 	iso_trapezoid_maze(depth=log2(len),15,clockwise=TRUE,draw_boundary=TRUE,
-#' 	  boundary_holes=c(1,3),method='one_ear',boundary_hole_color=c('clear','clear','green'))
+#' 	  boundary_holes=c(1,3),method='one_ear',
+#' 	  boundary_hole_color=c('clear','clear','green','clear'))
 #' 	iso_trapezoid_maze(depth=log2(len),15,clockwise=FALSE,draw_boundary=TRUE,
-#' 	  boundary_lines=c(2,3,4),boundary_holes=c(2),method='one_ear',boundary_hole_color=c('red'))
+#' 	  boundary_lines=c(2,3,4),boundary_holes=c(2),method='one_ear',
+#' 	  boundary_hole_color=c('red'))
 #' })
 #' @export
 iso_trapezoid_maze <- function(depth,unit_len=4L,clockwise=TRUE,start_from=c('midpoint','corner'),
 															 method=c('four_trapezoids','one_ear','random'),
-															 draw_boundary=FALSE,num_boundary_holes=2,boundary_lines=TRUE,boundary_holes=NULL,boundary_hole_color=NULL,
+															 boustro=c(1,1),
+															 draw_boundary=FALSE,num_boundary_holes=2,boundary_lines=TRUE,
+															 boundary_holes=NULL,boundary_hole_color=NULL,boundary_hole_locations=NULL,
+															 boundary_hole_arrows=FALSE,
 															 end_side=1) {
 	method <- match.arg(method)
 	start_from <- match.arg(start_from)
@@ -188,49 +141,66 @@ iso_trapezoid_maze <- function(depth,unit_len=4L,clockwise=TRUE,start_from=c('mi
 		my_method <- method
 		switch(my_method,
 			four_trapezoids={
+
 				# recurse.
-				magic_ratio <- sqrt(3) / 4
+				iso_trapezoid_maze(unit_len=unit_len,depth=depth-1,clockwise=clockwise,start_from='midpoint',
+													 draw_boundary=FALSE,num_boundary_holes=NULL,
+													 boustro=rev(boustro),end_side=1)
 
-				turtle_up()
-				.turn_right(multiplier * 90)
-				turtle_forward(num_segs * unit_len * magic_ratio)
-				.turn_left(multiplier * 90)
-				holey_bone(unit_len,num_segs/2)
-				.turn_left(multiplier * 90)
-				turtle_forward(num_segs * unit_len * magic_ratio)
-				.turn_right(multiplier * 90)
+				# determine inner holes
+				starts <- c(2,2,3,4,4)
+				ends   <- c(3,1,1,1,3)
+				which_holes <- .span_tree(starts,ends)
 
-				if (depth > 1) {
-					iso_trapezoid_maze(depth-1,unit_len,clockwise=clockwise,draw_boundary=FALSE)
+				inner_lines <- c(FALSE,TRUE,TRUE,FALSE,
+												 FALSE,FALSE,TRUE,FALSE,
+												 FALSE,FALSE,TRUE,TRUE)
+				inner_holes <- rep(FALSE,length(inner_lines))
+				inner_holes[which(inner_lines)[which_holes]] <- TRUE
+				inner_hole_locs <- .rboustro(12,boustro=boustro,nsegs=num_segs)
+
+				# have at it
+				turn_ang <- c(120,60,60)
+				for (iii in 1:3) {
 					turtle_forward(num_segs * unit_len)
-					.turn_right(multiplier * 120)
-					for (iii in c(1:3)) {
-						turtle_forward(num_segs * unit_len/2)
-						iso_trapezoid_maze(depth-1,unit_len,clockwise=clockwise,draw_boundary=FALSE)
-						turtle_forward(num_segs * unit_len/2)
-						.turn_right(multiplier * 60)
-					}
-					.turn_right(multiplier * 60)
-					turtle_forward(num_segs * unit_len)
+					.turn_right(multiplier * turn_ang[iii])
+					myidx <- 1:4 + (iii-1)*4
+					blines <- inner_lines[myidx]
+					bholes <- inner_holes[myidx]
+					iso_trapezoid_maze(unit_len=unit_len,depth=depth-1,clockwise=clockwise,start_from='corner',
+														 boustro=rev(boustro),
+														 draw_boundary=TRUE,
+														 num_boundary_holes=NULL,
+														 boundary_lines=blines,
+														 boundary_holes=bholes,
+														 boundary_hole_locations=inner_hole_locs[myidx],
+														 end_side=1)
 				}
+				turtle_forward(num_segs * unit_len)
+				.turn_right(multiplier * 120)
+				turtle_forward(num_segs * unit_len)
 			},
 			one_ear={
 				coinflip <- sample.int(n=2,size=1)
 				if (coinflip==1) {
 					parallelogram_maze(unit_len=unit_len,height=num_segs,width=num_segs,angle=120,clockwise=clockwise,
 														 method='random',start_from='corner',
+														 height_boustro=boustro,width_boustro=boustro,
 														 draw_boundary=TRUE,num_boundary_holes=NULL,boundary_lines=c(4),boundary_holes=4,
 														 end_side=4)
 					eq_triangle_maze(depth=log2(num_segs),unit_len=unit_len,clockwise=!clockwise,
 													 method='random',start_from='corner',
+													 boustro=rev(boustro),
 													 draw_boundary=FALSE,end_side=2)
 					turtle_right(180)
 				} else {
 					eq_triangle_maze(depth=log2(num_segs),unit_len=unit_len,clockwise=clockwise,
 													 method='random',start_from='corner',
+													 boustro=rev(boustro),
 													 draw_boundary=FALSE,end_side=3)
 					parallelogram_maze(unit_len=unit_len,height=num_segs,width=num_segs,angle=60,clockwise=!clockwise,
 														 method='random',start_from='corner',
+														 height_boustro=boustro,width_boustro=boustro,
 														 draw_boundary=TRUE,num_boundary_holes=NULL,boundary_lines=c(1),boundary_holes=1,
 														 end_side=2)
 					turtle_right(180)
@@ -239,17 +209,16 @@ iso_trapezoid_maze <- function(depth,unit_len=4L,clockwise=TRUE,start_from=c('mi
 
 	}
 	if (draw_boundary) {
-		holes <- .interpret_boundary_holes(boundary_holes,num_boundary_holes,nsides=4)
-		boundary_lines <- .interpret_boundary_lines(boundary_lines,nsides=4)
-
 		turtle_backward(distance=unit_len * num_segs)
+		if (is.null(boundary_hole_locations)) {
+			boundary_hole_locations <- .rboustro(4,boustro=boustro,nsegs=num_segs)
+			boundary_hole_locations[1] <- .rboustro(1,boustro=boustro,nsegs=2*num_segs)
+		}
 
-		holey_path(unit_len=unit_len,
-							lengths=num_segs * c(2,1,1,1),
-							angles=multiplier * 60 * c(2,1,1,2),
-							draw_line=boundary_lines,
-							has_hole=holes,
-							hole_color=boundary_hole_color)
+		.do_boundary(unit_len,lengths=num_segs * c(2,1,1,1),angles=multiplier * 60 * c(2,1,1,2),
+								 num_boundary_holes=num_boundary_holes,boundary_lines=boundary_lines,
+								 boundary_holes=boundary_holes,boundary_hole_color=boundary_hole_color,
+								 boundary_hole_locations=boundary_hole_locations,boundary_hole_arrows=boundary_hole_arrows)
 
 		turtle_forward(distance=unit_len * num_segs)
 	}

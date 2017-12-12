@@ -7,8 +7,11 @@
 parallelogram_maze(unit_len, height, width = height, angle = 90,
   clockwise = TRUE, method = c("two_parallelograms", "four_parallelograms",
   "uniform", "random"), start_from = c("midpoint", "corner"), balance = 0,
+  height_boustro = c(1, 1), width_boustro = c(1, 1),
   draw_boundary = FALSE, num_boundary_holes = 2, boundary_lines = TRUE,
-  boundary_holes = NULL, boundary_hole_color = NULL, end_side = 1)
+  boundary_holes = NULL, boundary_hole_color = NULL,
+  boundary_hole_locations = NULL, boundary_hole_arrows = FALSE,
+  end_side = 1)
 }
 \arguments{
 \item{unit_len}{the unit length in graph coordinates. This controls
@@ -21,7 +24,11 @@ segments.}
 \item{width}{the length of the second side in numbers of \code{unit_len}
 segments.}
 
-\item{angle}{the angle (in degrees) between the first and second sides.}
+\item{angle}{the angle (in degrees) between the first and second sides.
+Note that this is the angle that the Turtle turns when rounding
+the first corner, so it is the internal angle at the starting
+point (if starting from a corner), and the external angle at
+the second corner.}
 
 \item{clockwise}{whether to draw clockwise.}
 
@@ -50,6 +57,20 @@ Note that balance is positive and large, you tend to generate nearly
 uniform splits. When balance is negative and large, you tend to have
 imbalanced mazes, and the imbalance propagates.}
 
+\item{height_boustro}{an array of two values, which help determine
+the location of holes in internal lines of length
+\code{height}. The default value, \code{c(1,1)} results in 
+uniform selection. Otherwise the location of holes are chosen
+with probability proportional to a beta density with 
+\code{shape1} and \code{shape2} the two elements of \code{height_boustro}
+in order. In sub mazes, this parameter is reversed, which
+can lead to \sQuote{boustrophedonic} mazes. The sum of values
+should probably not exceed 30, as otherwise the location of internal
+holes is forced.}
+
+\item{width_boustro}{an array of two values, which help determine
+the location of any split along lines which are length \code{width}.}
+
 \item{draw_boundary}{a boolean indicating whether a final boundary shall be
 drawn around the maze.}
 
@@ -75,6 +96,21 @@ is drawn, no hole can be drawn either.}
 for more details. Can be an array of colors, or colors and the 
 value \code{'clear'}, which stands in for \code{NULL} to
 indicate no filled hole to be drawn.}
+
+\item{boundary_hole_locations}{the \sQuote{locations} of the boundary holes
+within each boundary segment.
+A value of \code{NULL} indicates the code may randomly choose, as is
+the default.
+May be a numeric array. A positive value up to the side length is
+interpreted as the location to place the boundary hole.
+A negative value is interpreted as counting down from the side
+length plus 1. A value of zero corresponds to allowing the 
+code to pick the location within a segment.
+A value of \code{NA} may cause an error.}
+
+\item{boundary_hole_arrows}{a boolean or boolean array indicating whether to draw
+perpendicular double arrows at the boundary holes, as a visual guide. These
+can be useful for locating the entry and exit points of a maze.}
 
 \item{end_side}{the number of the side to end on. A value of
 1 corresponds to the starting side, while higher numbers
@@ -167,6 +203,17 @@ turtle_do({
   }
 })
 
+# a somewhat 'boustrophedonic' maze
+turtle_init(500,300,mode='clip')
+turtle_hide()
+turtle_up()
+turtle_do({
+ turtle_setpos(15,15)
+ turtle_setangle(0)
+ parallelogram_maze(angle=90,unit_len=10,width=47,height=27,
+    method='two_parallelograms', height_boustro=c(21,3),width_boustro=c(21,3),balance=-0.25,
+		 start_from='corner',draw_boundary=TRUE)
+})
 }
 \author{
 Steven E. Pav \email{shabbychef@gmail.com}
