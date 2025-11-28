@@ -4,8 +4,8 @@ Authors@R: c(person(c("Steven", "E."), "Pav",
     role=c("aut","cre"),
     email="shabbychef@gmail.com",
 		comment = c(ORCID = "0000-0002-4197-6195")))
-Version: 0.2.0
-Date: 2017-12-11
+Version: 0.2.1
+Date: 2025-11-18
 License: LGPL-3
 Title: Generate Recursive Mazes
 BugReports: https://github.com/shabbychef/mazealls/issues
@@ -24,11 +24,12 @@ Collate: 'decagon_maze.r' 'dodecagon_maze.r' 'eq_triangle_maze.r'
         'hexaflake_maze.r' 'hexagon_maze.r' 'holey_line.r'
         'holey_path.r' 'iso_trapezoid_maze.r' 'koch_maze.r'
         'mazealls.r' 'octagon_maze.r' 'parallelogram_maze.r'
-        'sierpinski_carpet_maze.r' 'sierpinski_maze.r'
-        'sierpinski_trapezoid_maze.r' 'utils.r'
-RoxygenNote: 6.0.1
+        'sierpinski_carpet_maze.r' 'sierpinski_hexagon_maze.r'
+        'sierpinski_maze.r' 'sierpinski_trapezoid_maze.r' 'utils.r'
+RoxygenNote: 7.3.2
 NeedsCompilation: no
-Packaged: 2017-12-12 06:34:19 UTC; root
-Author: Steven E. Pav [aut, cre] (0000-0002-4197-6195)
+Packaged: 2025-11-26 23:41:13 UTC; spav
+Author: Steven E. Pav [aut, cre] (ORCID:
+    <https://orcid.org/0000-0002-4197-6195>)
 Repository: CRAN
-Date/Publication: 2017-12-12 06:49:44 UTC
+Date/Publication: 2025-11-28 13:20:11 UTC

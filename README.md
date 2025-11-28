@@ -2,11 +2,10 @@
 
 # mazealls
 
-[![Build Status](https://travis-ci.org/shabbychef/mazealls.png)](https://travis-ci.org/shabbychef/mazealls)
-[![codecov.io](http://codecov.io/github/shabbychef/mazealls/coverage.svg?branch=master)](http://codecov.io/github/shabbychef/mazealls?branch=master)
-[![CRAN](http://www.r-pkg.org/badges/version-ago/mazealls)](https://cran.r-project.org/package=mazealls)
-[![Downloads](http://cranlogs.r-pkg.org/badges/mazealls?color=brightgreen)](http://www.r-pkg.org/pkg/mazealls)
-[![Total](http://cranlogs.r-pkg.org/badges/grand-total/mazealls?color=brightgreen)](http://www.r-pkg.org/pkg/mazealls)
+[![Build Status](https://github.com/shabbychef/mazealls/workflows/R-CMD-check/badge.svg)](https://github.com/shabbychef/mazealls/actions)
+[![CRAN](https://www.r-pkg.org/badges/version/mazealls)](https://cran.r-project.org/package=mazealls)
+[![Downloads](http://cranlogs.r-pkg.org/badges/mazealls?color=green)](https://www.r-pkg.org:443/pkg/mazealls)
+[![Total](http://cranlogs.r-pkg.org/badges/grand-total/mazealls?color=green)](https://www.r-pkg.org:443/pkg/mazealls)
 [![Rdoc](http://www.rdocumentation.org/badges/version/mazealls)](http://www.rdocumentation.org/packages/mazealls)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 
@@ -25,7 +24,7 @@ via [drat](https://github.com/eddelbuettel/drat "drat"), or
 from github:
 
 
-```r
+``` r
 # via CRAN:
 install.packages("mazealls")
 # via drat:
@@ -39,7 +38,7 @@ if (require(devtools)) {
 }
 ```
 
-# parallelogram maze
+# Parallelogram maze
 
 The simplest maze to generate recursively is a parallelogram. One can generate
 a parallelogram maze by splitting the domain into two parts by an arbitrary
@@ -49,7 +48,7 @@ where by 'length' we mean in units of 'hallway widths', what we call the
 `unit_len` in the API. Here is a simple parallelogram maze:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(1000, 1000)
@@ -59,12 +58,15 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 400)
     turtle_right(90)
-    parallelogram_maze(angle = 90, unit_len = 10, width = 75, 
+    parallelogram_maze(angle = 90, unit_len = 10, width = 75,
         height = 55, method = "uniform", draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/para-maze-1.png" title="plot of chunk para-maze" alt="plot of chunk para-maze" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/para-maze-1.png" alt="plot of chunk para-maze" width="700px" height="700px" />
+<p class="caption">plot of chunk para-maze</p>
+</div>
 
 The `parallelogram_maze` function admits a `balance` parameter which controls
 how the maze should be recursively subdivided. A negative value creates
@@ -73,7 +75,7 @@ example below we create seven mazes side by side with an increasing balance
 parameter:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(2000, 2000)
@@ -88,10 +90,10 @@ turtle_do({
     bholes <- c(1, 3)
     set.seed(1234)
     for (iii in seq_along(valseq)) {
-        parallelogram_maze(angle = 90, unit_len = 12, 
-            width = 22, height = 130, method = "two_parallelograms", 
-            draw_boundary = TRUE, balance = valseq[iii], 
-            end_side = 3, boundary_lines = blines, 
+        parallelogram_maze(angle = 90, unit_len = 12,
+            width = 22, height = 130, method = "two_parallelograms",
+            draw_boundary = TRUE, balance = valseq[iii],
+            end_side = 3, boundary_lines = blines,
             boundary_holes = bholes)
         turtle_right(180)
         blines <- c(2, 3, 4)
@@ -100,9 +102,40 @@ turtle_do({
 })
 ```
 
-<img src="man/figures/para-imbalance-fade-1.png" title="plot of chunk para-imbalance-fade" alt="plot of chunk para-imbalance-fade" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/para-imbalance-fade-1.png" alt="plot of chunk para-imbalance-fade" width="700px" height="700px" />
+<p class="caption">plot of chunk para-imbalance-fade</p>
+</div>
 
-# triangle maze
+## Hilbert Curve maze
+
+The `parallelogram_maze` can be drawn in a Hilbert Curve:
+
+
+``` r
+library(TurtleGraphics)
+library(mazealls)
+turtle_init(1020, 1020, mode = "clip")
+turtle_hide()
+turtle_up()
+turtle_do({
+    turtle_setpos(15, 15)
+    turtle_setangle(0)
+    parallelogram_maze(angle = 90, unit_len = 10, width = 96,
+        height = 96, method = "hilbert", hilbert_balance = 4,
+        height_boustro = c(30, 2), width_boustro = c(30,
+            2), boundary_holes = c(1, 4), start_from = "corner",
+        boundary_hole_locations = c(1, 1, 1, 1), draw_boundary = TRUE)
+})
+```
+
+<div class="figure">
+<img src="man/figures/para-hilbert-1.png" alt="plot of chunk para-hilbert" width="700px" height="700px" />
+<p class="caption">plot of chunk para-hilbert</p>
+</div>
+
+
+# Triangle maze
 
 An equilateral triangle maze can be constructed in a number of different ways:
 
@@ -122,7 +155,7 @@ of side length one less than the original.
 I illustrate them here:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # uniform method
@@ -133,15 +166,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = 6, unit_len = 12, method = "uniform", 
+    eq_triangle_maze(depth = 6, unit_len = 12, method = "uniform",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-uniform-1.png" title="plot of chunk eq-tri-uniform" alt="plot of chunk eq-tri-uniform" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-uniform-1.png" alt="plot of chunk eq-tri-uniform" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-uniform</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # stacked trapezoids
@@ -152,15 +188,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = 6, unit_len = 12, method = "stack_trapezoids", 
+    eq_triangle_maze(depth = 6, unit_len = 12, method = "stack_trapezoids",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-stack-1.png" title="plot of chunk eq-tri-stack" alt="plot of chunk eq-tri-stack" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-stack-1.png" alt="plot of chunk eq-tri-stack" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-stack</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # four triangles
@@ -171,14 +210,17 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = 6, unit_len = 12, method = "triangles", 
+    eq_triangle_maze(depth = 6, unit_len = 12, method = "triangles",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-four-tri-1.png" title="plot of chunk eq-tri-four-tri" alt="plot of chunk eq-tri-four-tri" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-four-tri-1.png" alt="plot of chunk eq-tri-four-tri" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-four-tri</p>
+</div>
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # two ears
@@ -189,15 +231,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = 6, unit_len = 12, method = "two_ears", 
+    eq_triangle_maze(depth = 6, unit_len = 12, method = "two_ears",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-two-ears-1.png" title="plot of chunk eq-tri-two-ears" alt="plot of chunk eq-tri-two-ears" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-two-ears-1.png" alt="plot of chunk eq-tri-two-ears" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-two-ears</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # hex and three
@@ -208,15 +253,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = log2(66), unit_len = 12, 
+    eq_triangle_maze(depth = log2(66), unit_len = 12,
         method = "hex_and_three", draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-hex-and-three-1.png" title="plot of chunk eq-tri-hex-and-three" alt="plot of chunk eq-tri-hex-and-three" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-hex-and-three-1.png" alt="plot of chunk eq-tri-hex-and-three" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-hex-and-three</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # shave
@@ -227,16 +275,19 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = log2(66), unit_len = 12, 
+    eq_triangle_maze(depth = log2(66), unit_len = 12,
         method = "shave", draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/eq-tri-shave-1.png" title="plot of chunk eq-tri-shave" alt="plot of chunk eq-tri-shave" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-shave-1.png" alt="plot of chunk eq-tri-shave" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-shave</p>
+</div>
 
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # shave all
@@ -247,15 +298,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    eq_triangle_maze(depth = log2(66), unit_len = 12, 
-        method = "shave_all", draw_boundary = TRUE, 
+    eq_triangle_maze(depth = log2(66), unit_len = 12,
+        method = "shave_all", draw_boundary = TRUE,
         boustro = c(35, 2))
 })
 ```
 
-<img src="man/figures/eq-tri-shave-all-1.png" title="plot of chunk eq-tri-shave-all" alt="plot of chunk eq-tri-shave-all" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/eq-tri-shave-all-1.png" alt="plot of chunk eq-tri-shave-all" width="700px" height="700px" />
+<p class="caption">plot of chunk eq-tri-shave-all</p>
+</div>
 
-# hexagon maze
+# Hexagon maze
 
 
 An regular hexagonal maze can be constructed in a number of different ways:
@@ -269,7 +323,7 @@ An regular hexagonal maze can be constructed in a number of different ways:
 
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # two trapezoids
@@ -280,15 +334,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    hexagon_maze(depth = 5, unit_len = 12, method = "two_trapezoids", 
+    hexagon_maze(depth = 5, unit_len = 12, method = "two_trapezoids",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/hex-trapezoids-1.png" title="plot of chunk hex-trapezoids" alt="plot of chunk hex-trapezoids" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/hex-trapezoids-1.png" alt="plot of chunk hex-trapezoids" width="700px" height="700px" />
+<p class="caption">plot of chunk hex-trapezoids</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # six triangles
@@ -299,15 +356,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    hexagon_maze(depth = 5, unit_len = 12, method = "six_triangles", 
+    hexagon_maze(depth = 5, unit_len = 12, method = "six_triangles",
         draw_boundary = TRUE, boundary_hole_arrows = TRUE)
 })
 ```
 
-<img src="man/figures/hex-triangles-1.png" title="plot of chunk hex-triangles" alt="plot of chunk hex-triangles" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/hex-triangles-1.png" alt="plot of chunk hex-triangles" width="700px" height="700px" />
+<p class="caption">plot of chunk hex-triangles</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # six triangles
@@ -318,20 +378,23 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    hexagon_maze(depth = 5, unit_len = 12, method = "three_parallelograms", 
+    hexagon_maze(depth = 5, unit_len = 12, method = "three_parallelograms",
         draw_boundary = TRUE, boundary_hole_arrows = TRUE)
 })
 ```
 
-<img src="man/figures/hex-parallelo-1.png" title="plot of chunk hex-parallelo" alt="plot of chunk hex-parallelo" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/hex-parallelo-1.png" alt="plot of chunk hex-parallelo" width="700px" height="700px" />
+<p class="caption">plot of chunk hex-parallelo</p>
+</div>
 
-# dodecagon maze
+# Dodecagon maze
 
 A dodecagon can be dissected into a hexagon and a ring of alternating
 squares and equilateral triangles:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # dodecagon
@@ -341,15 +404,18 @@ turtle_up()
 turtle_do({
     turtle_setpos(80, 1100)
     turtle_setangle(0)
-    dodecagon_maze(depth = log2(27), unit_len = 20, 
-        draw_boundary = TRUE, boundary_holes = c(1, 
+    dodecagon_maze(depth = log2(27), unit_len = 20,
+        draw_boundary = TRUE, boundary_holes = c(1,
             7))
 })
 ```
 
-<img src="man/figures/simple-dodecagon-1.png" title="plot of chunk simple-dodecagon" alt="plot of chunk simple-dodecagon" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/simple-dodecagon-1.png" alt="plot of chunk simple-dodecagon" width="700px" height="700px" />
+<p class="caption">plot of chunk simple-dodecagon</p>
+</div>
 
-# trapezoid maze
+# Trapezoid maze
 
 
 An isosceles trapezoid maze can be constructed in a number of different ways:
@@ -361,7 +427,7 @@ An isosceles trapezoid maze can be constructed in a number of different ways:
 
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # four trapezoids
@@ -372,15 +438,18 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    iso_trapezoid_maze(depth = 5, unit_len = 12, method = "four_trapezoids", 
+    iso_trapezoid_maze(depth = 5, unit_len = 12, method = "four_trapezoids",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/trap-four-1.png" title="plot of chunk trap-four" alt="plot of chunk trap-four" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/trap-four-1.png" alt="plot of chunk trap-four" width="700px" height="700px" />
+<p class="caption">plot of chunk trap-four</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # one ear
@@ -391,12 +460,15 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 300)
     turtle_right(90)
-    iso_trapezoid_maze(depth = 5, unit_len = 12, method = "one_ear", 
+    iso_trapezoid_maze(depth = 5, unit_len = 12, method = "one_ear",
         draw_boundary = TRUE)
 })
 ```
 
-<img src="man/figures/trap-ear-1.png" title="plot of chunk trap-ear" alt="plot of chunk trap-ear" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/trap-ear-1.png" alt="plot of chunk trap-ear" width="700px" height="700px" />
+<p class="caption">plot of chunk trap-ear</p>
+</div>
 
 # Rhombic Dissections
 
@@ -407,7 +479,7 @@ a dodecagon would also admit such a dissection, this would require extremely
 acute angles which would make an ugly maze.
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # octagon
@@ -417,15 +489,18 @@ turtle_up()
 turtle_do({
     turtle_setpos(75, 1000)
     turtle_setangle(0)
-    octagon_maze(log2(48), 16, draw_boundary = TRUE, 
+    octagon_maze(log2(48), 16, draw_boundary = TRUE,
         boundary_holes = c(1, 5))
 })
 ```
 
-<img src="man/figures/simple-octagon-1.png" title="plot of chunk simple-octagon" alt="plot of chunk simple-octagon" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/simple-octagon-1.png" alt="plot of chunk simple-octagon" width="700px" height="700px" />
+<p class="caption">plot of chunk simple-octagon</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # decagon
@@ -435,12 +510,15 @@ turtle_up()
 turtle_do({
     turtle_setpos(60, 1100)
     turtle_setangle(0)
-    decagon_maze(5, 21, draw_boundary = TRUE, boundary_holes = c(1, 
+    decagon_maze(5, 21, draw_boundary = TRUE, boundary_holes = c(1,
         6))
 })
 ```
 
-<img src="man/figures/simple-decagon-1.png" title="plot of chunk simple-decagon" alt="plot of chunk simple-decagon" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/simple-decagon-1.png" alt="plot of chunk simple-decagon" width="700px" height="700px" />
+<p class="caption">plot of chunk simple-decagon</p>
+</div>
 
 # Fractal mazes
 
@@ -450,7 +528,7 @@ Everyone's favorite snowflake can also be a maze. Simply fill in triangle bumps
 with triangular mazes and create lines with holes as needed:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # koch flake
@@ -466,12 +544,15 @@ turtle_do({
 })
 ```
 
-<img src="man/figures/koch-flake-1.png" title="plot of chunk koch-flake" alt="plot of chunk koch-flake" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/koch-flake-1.png" alt="plot of chunk koch-flake" width="700px" height="700px" />
+<p class="caption">plot of chunk koch-flake</p>
+</div>
 
 Koch flakes of different sizes tile the plane:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # koch flake
@@ -483,7 +564,7 @@ turtle_do({
     turtle_setangle(60)
     ul <- 12
     dep <- 4
-    koch_maze(depth = dep, unit_len = ul, clockwise = TRUE, 
+    koch_maze(depth = dep, unit_len = ul, clockwise = TRUE,
         draw_boundary = FALSE)
     turtle_left(30)
     turtle_col("gray40")
@@ -496,9 +577,9 @@ turtle_do({
         } else {
             bholes <- c(1)
         }
-        koch_maze(depth = dep - dropdown, unit_len = ul * 
-            (3^(dropdown - 0.5)), clockwise = FALSE, 
-            draw_boundary = TRUE, boundary_holes = bholes, 
+        koch_maze(depth = dep - dropdown, unit_len = ul *
+            (3^(dropdown - 0.5)), clockwise = FALSE,
+            draw_boundary = TRUE, boundary_holes = bholes,
             boundary_hole_arrows = c(2, 3))
         turtle_forward(3^(dep - 1) * ul * sqrt(3))
         turtle_right(60)
@@ -506,14 +587,17 @@ turtle_do({
 })
 ```
 
-<img src="man/figures/koch-meta-flake-1.png" title="plot of chunk koch-meta-flake" alt="plot of chunk koch-meta-flake" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/koch-meta-flake-1.png" alt="plot of chunk koch-meta-flake" width="700px" height="700px" />
+<p class="caption">plot of chunk koch-meta-flake</p>
+</div>
 
 ## Sierpinski Triangle
 
 Similarly, one can construct a maze in a Sierpinski triangle.
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(2500, 2500, mode = "clip")
@@ -522,18 +606,23 @@ turtle_hide()
 turtle_do({
     turtle_setpos(50, 1250)
     turtle_setangle(0)
-    sierpinski_maze(unit_len = 19, depth = 7, draw_boundary = TRUE, 
-        boundary_lines = TRUE, boundary_holes = c(1, 
+    sierpinski_maze(unit_len = 19, depth = 7, draw_boundary = TRUE,
+        boundary_lines = TRUE, boundary_holes = c(1,
             3), color1 = "black", color2 = "gray60")
 })
 ```
 
-<img src="man/figures/sierpinski-1.png" title="plot of chunk sierpinski" alt="plot of chunk sierpinski" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/sierpinski-1.png" alt="plot of chunk sierpinski" width="700px" height="700px" />
+<p class="caption">plot of chunk sierpinski</p>
+</div>
+
+### Sierpinski Carpet
 
 And a Sierpinski Carpet:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(800, 1000)
@@ -542,16 +631,19 @@ turtle_hide()
 turtle_do({
     turtle_setpos(50, 450)
     turtle_setangle(0)
-    sierpinski_carpet_maze(angle = 80, unit_len = 8, 
-        width = 90, height = 90, draw_boundary = TRUE, 
+    sierpinski_carpet_maze(angle = 80, unit_len = 8,
+        width = 90, height = 90, draw_boundary = TRUE,
         boundary_holes = c(1, 3), balance = 1.5, color2 = "green")
 })
 ```
 
-<img src="man/figures/sierpinski-carpet-1.png" title="plot of chunk sierpinski-carpet" alt="plot of chunk sierpinski-carpet" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/sierpinski-carpet-1.png" alt="plot of chunk sierpinski-carpet" width="700px" height="700px" />
+<p class="caption">plot of chunk sierpinski-carpet</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(2000, 2000, mode = "clip")
@@ -563,23 +655,28 @@ turtle_do({
     turtle_setangle(180)
     for (iii in c(1:3)) {
         mybhol <- bholes[[iii]]
-        sierpinski_carpet_maze(angle = 120, unit_len = 11, 
-            width = 81, height = 81, draw_boundary = TRUE, 
-            boundary_lines = c(1, 2, 3), num_boundary_holes = 0, 
-            boundary_holes = mybhol, balance = 1, color2 = "green", 
+        sierpinski_carpet_maze(angle = 120, unit_len = 11,
+            width = 81, height = 81, draw_boundary = TRUE,
+            boundary_lines = c(1, 2, 3), num_boundary_holes = 0,
+            boundary_holes = mybhol, balance = 1, color2 = "green",
             start_from = "corner")
         turtle_left(120)
     }
 })
 ```
 
-<img src="man/figures/menger-sponge-1.png" title="plot of chunk menger-sponge" alt="plot of chunk menger-sponge" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/menger-sponge-1.png" alt="plot of chunk menger-sponge" width="700px" height="700px" />
+<p class="caption">plot of chunk menger-sponge</p>
+</div>
+
+### Sierpinski Trapezoids
 
 One can make four different kinds of Sierpinski trapezoids, the traditional
 four triangles, a hexaflake, and something like a Dragon fractal:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 turtle_init(1050, 600, mode = "clip")
@@ -589,15 +686,42 @@ turtle_do({
     for (iii in c(1:4)) {
         turtle_setpos(40 + (iii - 1) * 250, 300)
         turtle_setangle(0)
-        sierpinski_trapezoid_maze(unit_len = 8, depth = 5, 
-            draw_boundary = TRUE, start_from = "midpoint", 
-            num_boundary_holes = 2, boundary_holes = c(2, 
+        sierpinski_trapezoid_maze(unit_len = 8, depth = 5,
+            draw_boundary = TRUE, start_from = "midpoint",
+            num_boundary_holes = 2, boundary_holes = c(2,
                 4), color2 = "green", flip_color_parts = iii)  # this controls fractal style
     }
 })
 ```
 
-<img src="man/figures/sierpinski-trapezoids-1.png" title="plot of chunk sierpinski-trapezoids" alt="plot of chunk sierpinski-trapezoids" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/sierpinski-trapezoids-1.png" alt="plot of chunk sierpinski-trapezoids" width="700px" height="700px" />
+<p class="caption">plot of chunk sierpinski-trapezoids</p>
+</div>
+
+### Sierpinski Hexagon
+
+
+``` r
+library(TurtleGraphics)
+library(mazealls)
+turtle_init(1250, 1100, mode = "clip")
+turtle_up()
+turtle_hide()
+turtle_do({
+    turtle_setpos(50, 550)
+    turtle_setangle(30)
+    sierpinski_hexagon_maze(depth = 6, unit_len = 9,
+        boundary_lines = TRUE, draw_boundary = TRUE,
+        boundary_holes = c(1, 3), start_from = "corner",
+        color1 = "black", color2 = "green", style = "sierpinski")
+})
+```
+
+<div class="figure">
+<img src="man/figures/sierpinski-hexagon-1.png" alt="plot of chunk sierpinski-hexagon" width="700px" height="700px" />
+<p class="caption">plot of chunk sierpinski-hexagon</p>
+</div>
 
 
 ## Hexaflake 
@@ -606,7 +730,7 @@ A hexaflake is a cross between a Koch snowflake and a Sierpinski triangle, at
 least in theory.
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # hexaflake
@@ -617,20 +741,23 @@ dep <- 4
 ul <- floor(sidelen/(3^dep))
 true_wid <- 2 * ul * 3^dep * sqrt(3)/2
 
-turtle_init(ceiling(1.1 * inner_side), ceiling(1.1 * 
+turtle_init(ceiling(1.1 * inner_side), ceiling(1.1 *
     long_side), mode = "clip")
 turtle_up()
 turtle_hide()
 turtle_do({
-    turtle_setpos(0.5 * (ceiling(1.1 * inner_side) - 
+    turtle_setpos(0.5 * (ceiling(1.1 * inner_side) -
         true_wid), 0.55 * long_side)
     turtle_setangle(0)
-    hexaflake_maze(depth = dep, unit_len = floor(sidelen/(3^dep)), 
+    hexaflake_maze(depth = dep, unit_len = floor(sidelen/(3^dep)),
         draw_boundary = TRUE, color2 = "gray80")
 })
 ```
 
-<img src="man/figures/hexaflake-1.png" title="plot of chunk hexaflake" alt="plot of chunk hexaflake" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/hexaflake-1.png" alt="plot of chunk hexaflake" width="700px" height="700px" />
+<p class="caption">plot of chunk hexaflake</p>
+</div>
 
 # Controls
 
@@ -642,7 +769,7 @@ of the 'hallways' of a maze. Here is an example of using different
 unit lengths in a stack of trapezoids
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # stack some trapezoids with different unit_len
@@ -655,16 +782,19 @@ turtle_do({
     turtle_right(90)
     clockwise <- TRUE
     for (iii in c(1:6)) {
-        iso_trapezoid_maze(depth = 5, unit_len = 2^(6 - 
-            iii), method = "four_trapezoids", draw_boundary = TRUE, 
-            clockwise = clockwise, end_side = 3, start_from = "midpoint", 
+        iso_trapezoid_maze(depth = 5, unit_len = 2^(6 -
+            iii), method = "four_trapezoids", draw_boundary = TRUE,
+            clockwise = clockwise, end_side = 3, start_from = "midpoint",
             boundary_lines = c(1, 2, 4), boundary_holes = c(1))
         clockwise <- !clockwise
     }
 })
 ```
 
-<img src="man/figures/unit-len-stack-trap-1.png" title="plot of chunk unit-len-stack-trap" alt="plot of chunk unit-len-stack-trap" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/unit-len-stack-trap-1.png" alt="plot of chunk unit-len-stack-trap" width="700px" height="700px" />
+<p class="caption">plot of chunk unit-len-stack-trap</p>
+</div>
 
 ## boundaries
 
@@ -684,7 +814,7 @@ at random. Holes can be drawn as colored segments with the
 hole. The value 'clear' stands in for clear holes.
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # side by side
@@ -695,30 +825,33 @@ turtle_do({
     turtle_left(90)
     turtle_forward(distance = 450)
     turtle_right(90)
-    
-    parallelogram_maze(unit_len = 10, height = 25, 
+
+    parallelogram_maze(unit_len = 10, height = 25,
         draw_boundary = FALSE, end_side = 3)
-    
+
     turtle_left(90)
     turtle_forward(distance = 30)
     turtle_left(90)
-    
-    parallelogram_maze(unit_len = 10, height = 25, 
-        draw_boundary = TRUE, boundary_lines = c(1, 
+
+    parallelogram_maze(unit_len = 10, height = 25,
+        draw_boundary = TRUE, boundary_lines = c(1,
             3), boundary_holes = FALSE, end_side = 3)
-    
+
     turtle_left(90)
     turtle_forward(distance = 30)
     turtle_left(90)
-    
-    parallelogram_maze(unit_len = 10, height = 25, 
-        draw_boundary = TRUE, boundary_lines = c(2, 
-            4), boundary_holes = c(2, 4), boundary_hole_color = c("ignore", 
+
+    parallelogram_maze(unit_len = 10, height = 25,
+        draw_boundary = TRUE, boundary_lines = c(2,
+            4), boundary_holes = c(2, 4), boundary_hole_color = c("ignore",
             "green", "ignore", "blue"))
 })
 ```
 
-<img src="man/figures/boundary-stuff-1.png" title="plot of chunk boundary-stuff" alt="plot of chunk boundary-stuff" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/boundary-stuff-1.png" alt="plot of chunk boundary-stuff" width="700px" height="700px" />
+<p class="caption">plot of chunk boundary-stuff</p>
+</div>
 
 ## end side
 
@@ -729,7 +862,7 @@ drawn. Along with the boundary controls, the ending side can be useful to join t
 polygons into more complex mazes, as below:
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # triangle of hexes
@@ -743,52 +876,55 @@ turtle_do({
     turtle_forward(distance = 1150)
     turtle_right(90)
     turtle_backward(distance = 650)
-    hexagon_maze(unit_len = ul, depth = dep, end_side = 4, 
-        draw_boundary = TRUE, boundary_holes = c(1, 
+    hexagon_maze(unit_len = ul, depth = dep, end_side = 4,
+        draw_boundary = TRUE, boundary_holes = c(1,
             3, 4))
-    parallelogram_maze(unit_len = ul, height = 2^dep, 
-        clockwise = FALSE, width = 3 * (2^dep), end_side = 3, 
-        draw_boundary = TRUE, num_boundary_holes = 0, 
+    parallelogram_maze(unit_len = ul, height = 2^dep,
+        clockwise = FALSE, width = 3 * (2^dep), end_side = 3,
+        draw_boundary = TRUE, num_boundary_holes = 0,
         boundary_lines = c(2, 4))
-    hexagon_maze(unit_len = ul, depth = dep, end_side = 2, 
-        draw_boundary = TRUE, boundary_holes = c(1, 
+    hexagon_maze(unit_len = ul, depth = dep, end_side = 2,
+        draw_boundary = TRUE, boundary_holes = c(1,
             2))
-    parallelogram_maze(unit_len = ul, height = 2^dep, 
-        clockwise = FALSE, width = 3 * (2^dep), end_side = 3, 
-        draw_boundary = TRUE, num_boundary_holes = 0, 
+    parallelogram_maze(unit_len = ul, height = 2^dep,
+        clockwise = FALSE, width = 3 * (2^dep), end_side = 3,
+        draw_boundary = TRUE, num_boundary_holes = 0,
         boundary_lines = c(2, 4))
-    hexagon_maze(unit_len = ul, depth = dep, end_side = 2, 
-        draw_boundary = TRUE, boundary_holes = c(1, 
+    hexagon_maze(unit_len = ul, depth = dep, end_side = 2,
+        draw_boundary = TRUE, boundary_holes = c(1,
             5))
-    parallelogram_maze(unit_len = ul, height = 2^dep, 
-        clockwise = FALSE, width = 3 * (2^dep), end_side = 3, 
-        draw_boundary = TRUE, num_boundary_holes = 0, 
+    parallelogram_maze(unit_len = ul, height = 2^dep,
+        clockwise = FALSE, width = 3 * (2^dep), end_side = 3,
+        draw_boundary = TRUE, num_boundary_holes = 0,
         boundary_lines = c(2, 4))
 })
 ```
 
-<img src="man/figures/tri-of-hex-1.png" title="plot of chunk tri-of-hex" alt="plot of chunk tri-of-hex" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/tri-of-hex-1.png" alt="plot of chunk tri-of-hex" width="700px" height="700px" />
+<p class="caption">plot of chunk tri-of-hex</p>
+</div>
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
 # tiling!
-tile_bit <- function(unit_len, depth, clockwise = TRUE, 
+tile_bit <- function(unit_len, depth, clockwise = TRUE,
     draw_boundary = FALSE, boundary_holes = NULL) {
     turtle_col("black")
-    parallelogram_maze(unit_len = unit_len, height = 2^depth, 
-        clockwise = clockwise, draw_boundary = TRUE, 
+    parallelogram_maze(unit_len = unit_len, height = 2^depth,
+        clockwise = clockwise, draw_boundary = TRUE,
         num_boundary_holes = 4)
     turtle_col("red")
     for (iii in c(1:4)) {
         turtle_forward(unit_len * 2^(depth - 1))
         turtle_right(90)
         turtle_forward(unit_len * 2^(depth - 1))
-        eq_triangle_maze(unit_len = unit_len, depth = depth, 
-            clockwise = !clockwise, draw_boundary = draw_boundary, 
-            boundary_lines = ifelse(iii <= 2, 2, 3), 
-            num_boundary_holes = 3, end_side = ifelse(iii == 
+        eq_triangle_maze(unit_len = unit_len, depth = depth,
+            clockwise = !clockwise, draw_boundary = draw_boundary,
+            boundary_lines = ifelse(iii <= 2, 2, 3),
+            num_boundary_holes = 3, end_side = ifelse(iii ==
                 4, 2, 1))
         if (iii == 2) {
             turtle_col("blue")
@@ -800,9 +936,9 @@ tile_bit <- function(unit_len, depth, clockwise = TRUE,
     } else {
         blines = 1
     }
-    parallelogram_maze(unit_len = unit_len, height = 2^depth, 
-        clockwise = clockwise, draw_boundary = TRUE, 
-        boundary_lines = blines, boundary_holes = blines, 
+    parallelogram_maze(unit_len = unit_len, height = 2^depth,
+        clockwise = clockwise, draw_boundary = TRUE,
+        boundary_lines = blines, boundary_holes = blines,
         end_side = 3)
     turtle_forward(unit_len * 2^(depth - 1))
     turtle_left(60)
@@ -821,7 +957,7 @@ turtle_do({
     for (jjj in c(1:5)) {
         turtle_setpos(x = x0, y = y0)
         turtle_setangle(angle = 0)
-        replicate(5, tile_bit(unit_len = ul, depth = dep, 
+        replicate(5, tile_bit(unit_len = ul, depth = dep,
             draw_boundary = TRUE))
         x0 <- x0 + ul * (2^dep) * (1 + sqrt(3)/2)
         y0 <- y0 + ul * (2^(dep - 1))
@@ -829,7 +965,10 @@ turtle_do({
 })
 ```
 
-<img src="man/figures/tileit-1.png" title="plot of chunk tileit" alt="plot of chunk tileit" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/tileit-1.png" alt="plot of chunk tileit" width="700px" height="700px" />
+<p class="caption">plot of chunk tileit</p>
+</div>
 
 # Fun
 
@@ -840,23 +979,23 @@ Or whatever you call it. Here are some mazes built using the primitives.
 Like it says on the label.
 
 
-```r
+``` r
 library(TurtleGraphics)
 library(mazealls)
-treeit <- function(unit_len, depth, height, left_shrink = 3/4, 
+treeit <- function(unit_len, depth, height, left_shrink = 3/4,
     right_shrink = 1/3) {
     height <- ceiling(height)
-    parallelogram_maze(unit_len = unit_len, height = 2^depth, 
-        width = height, clockwise = TRUE, draw_boundary = TRUE, 
-        boundary_lines = c(1, 2, 4), start_from = "midpoint", 
+    parallelogram_maze(unit_len = unit_len, height = 2^depth,
+        width = height, clockwise = TRUE, draw_boundary = TRUE,
+        boundary_lines = c(1, 2, 4), start_from = "midpoint",
         boundary_holes = c(1), end_side = 3)
     if (depth > 0) {
-        iso_trapezoid_maze(depth = depth - 1, unit_len = unit_len, 
-            clockwise = FALSE, draw_boundary = TRUE, 
-            boundary_lines = c(1, 3), start_from = "midpoint", 
+        iso_trapezoid_maze(depth = depth - 1, unit_len = unit_len,
+            clockwise = FALSE, draw_boundary = TRUE,
+            boundary_lines = c(1, 3), start_from = "midpoint",
             boundary_holes = c(1), end_side = 4)
-        treeit(unit_len = unit_len, depth = depth - 
-            1, height = left_shrink * height, left_shrink = left_shrink, 
+        treeit(unit_len = unit_len, depth = depth -
+            1, height = left_shrink * height, left_shrink = left_shrink,
             right_shrink = right_shrink)
         turtle_right(180)
         turtle_forward(unit_len * 2^(depth - 2))
@@ -865,14 +1004,14 @@ treeit <- function(unit_len, depth, height, left_shrink = 3/4,
         turtle_right(60)
         turtle_forward(unit_len * 2^(depth - 2))
         turtle_right(180)
-        treeit(unit_len = unit_len, depth = depth - 
-            1, height = right_shrink * height, left_shrink = left_shrink, 
+        treeit(unit_len = unit_len, depth = depth -
+            1, height = right_shrink * height, left_shrink = left_shrink,
             right_shrink = right_shrink)
         turtle_forward(unit_len * 2^(depth - 2))
         turtle_left(60)
         turtle_forward(unit_len * 2^(depth - 2))
         turtle_left(90)
-        turtle_forward(unit_len * sqrt(3) * 2^(depth - 
+        turtle_forward(unit_len * sqrt(3) * 2^(depth -
             2))
         turtle_left(90)
     }
@@ -887,17 +1026,71 @@ turtle_hide()
 turtle_do({
     turtle_setpos(1600, 20)
     turtle_setangle(270)
-    treeit(unit_len = 13, depth = 5, height = 70, left_shrink = 2/3, 
+    treeit(unit_len = 13, depth = 5, height = 70, left_shrink = 2/3,
         right_shrink = 1/3)
 })
 ```
 
-<img src="man/figures/tree-thing-1.png" title="plot of chunk tree-thing" alt="plot of chunk tree-thing" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/tree-thing-1.png" alt="plot of chunk tree-thing" width="700px" height="700px" />
+<p class="caption">plot of chunk tree-thing</p>
+</div>
+
+## A Christmas Tree
+
+
+``` r
+library(TurtleGraphics)
+library(mazealls)
+
+lwid <- 15
+set.seed(1234)
+turtle_init(1400, 1600, mode = "clip")
+turtle_up()
+turtle_hide()
+turtle_do({
+    turtle_left(180)
+    turtle_forward(500)
+    turtle_left(90)
+    turtle_col("brown")
+    parallelogram_maze(angle = 90, unit_len = lwid,
+        width = 18, height = 16, method = "uniform",
+        boundary_lines = c(2, 3, 4), boundary_holes = c(3),
+        end_side = 1, draw_boundary = TRUE)
+    turtle_right(180)
+    turtle_col("green")
+    bigwid <- 42
+    for (iii in c(1:4)) {
+        if (iii == 1) {
+            bmid <- sample(bigwid + c(-3:3), 1)
+        } else {
+            bmid <- sample(bigwid + c(-8:8), 1)
+        }
+        iso_trapezoid_maze(depth = log2(bigwid), unit_len = lwid,
+            method = "one_ear", draw_boundary = TRUE,
+            boundary_lines = c(1, 2, 4), boundary_holes = c(1),
+            boundary_hole_locations = c(bmid, 0, 0,
+                0), end_side = 3)
+        bigwid <- 2 + (bigwid/2)
+        turtle_right(180)
+    }
+    eq_triangle_maze(depth = log2(2 * bigwid - 2),
+        unit_len = lwid, method = "stack_trapezoids",
+        draw_boundary = TRUE, boundary_lines = c(1,
+            2, 3), boundary_holes = c(1, 2), boundary_hole_locations = c(sample((bigwid) +
+            c(-3:3), 1), sample(10:50, 1), 0), end_side = 3)
+})
+```
+
+<div class="figure">
+<img src="man/figures/christmas-tree-1.png" alt="plot of chunk christmas-tree" width="700px" height="700px" />
+<p class="caption">plot of chunk christmas-tree</p>
+</div>
 
 ## A hex spiral
 
 
-```r
+``` r
 turtle_init(2500, 2500, mode = "clip")
 turtle_up()
 turtle_hide()
@@ -910,24 +1103,27 @@ turtle_do({
     turtle_setpos(260, 570)
     turtle_setangle(270)
     for (iter in seq_along(lens)) {
-        parallelogram_maze(unit_len = ulen, height = high, 
-            width = lens[iter], start_from = "corner", 
-            clockwise = TRUE, draw_boundary = TRUE, 
+        parallelogram_maze(unit_len = ulen, height = high,
+            width = lens[iter], start_from = "corner",
+            clockwise = TRUE, draw_boundary = TRUE,
             boundary_holes = c(1, 3), end_side = 3)
-        eq_triangle_maze(unit_len = ulen, depth = log2(high), 
-            start_from = "corner", clockwise = FALSE, 
-            draw_boundary = TRUE, boundary_lines = c(3), 
-            num_boundary_holes = 0, boundary_holes = rep(FALSE, 
+        eq_triangle_maze(unit_len = ulen, depth = log2(high),
+            start_from = "corner", clockwise = FALSE,
+            draw_boundary = TRUE, boundary_lines = c(3),
+            num_boundary_holes = 0, boundary_holes = rep(FALSE,
                 3), end_side = 2)
     }
-    parallelogram_maze(unit_len = ulen, height = high, 
-        width = lens[iter] + della, start_from = "corner", 
-        clockwise = TRUE, draw_boundary = TRUE, boundary_holes = c(1, 
+    parallelogram_maze(unit_len = ulen, height = high,
+        width = lens[iter] + della, start_from = "corner",
+        clockwise = TRUE, draw_boundary = TRUE, boundary_holes = c(1,
             3), end_side = 3)
 })
 ```
 
-<img src="man/figures/hex-spiral-1.png" title="plot of chunk hex-spiral" alt="plot of chunk hex-spiral" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/hex-spiral-1.png" alt="plot of chunk hex-spiral" width="700px" height="700px" />
+<p class="caption">plot of chunk hex-spiral</p>
+</div>
 
 
 ## A rectangular spiral
@@ -935,8 +1131,8 @@ turtle_do({
 Well, a rhombus spiral.
 
 
-```r
-rect_spiral <- function(unit_len, height, width, thickness = 8L, 
+``` r
+rect_spiral <- function(unit_len, height, width, thickness = 8L,
     angle = 90, clockwise = TRUE, start_hole = FALSE) {
     if (start_hole) {
         bholes <- 1
@@ -945,7 +1141,7 @@ rect_spiral <- function(unit_len, height, width, thickness = 8L,
         bholes <- 4
         fourl_dist <- height
     }
-    
+
     last_one <- (width < thickness)
     if (last_one) {
         blines <- 1:4
@@ -954,21 +1150,21 @@ rect_spiral <- function(unit_len, height, width, thickness = 8L,
         blines <- c(1, 2, 4)
     }
     blocs <- -sample.int(n = thickness, size = 4, replace = TRUE)
-    
-    parallelogram_maze(unit_len = unit_len, height = thickness, 
-        width = fourl_dist, angle = 180 - angle, start_from = "corner", 
-        clockwise = clockwise, draw_boundary = TRUE, 
-        boundary_lines = blines, boundary_holes = bholes, 
+
+    parallelogram_maze(unit_len = unit_len, height = thickness,
+        width = fourl_dist, angle = 180 - angle, start_from = "corner",
+        clockwise = clockwise, draw_boundary = TRUE,
+        boundary_lines = blines, boundary_holes = bholes,
         boundary_hole_locations = blocs, end_side = 3)
     if (clockwise) {
         turtle_left(angle)
     } else {
         turtle_right(angle)
     }
-    
+
     if (!last_one) {
-        rect_spiral(unit_len, height = width, width = height - 
-            thickness, thickness = thickness, angle = 180 - 
+        rect_spiral(unit_len, height = width, width = height -
+            thickness, thickness = thickness, angle = 180 -
             angle, clockwise = clockwise, start_hole = FALSE)
     }
 }
@@ -979,12 +1175,15 @@ turtle_hide()
 turtle_do({
     turtle_setpos(300, 50)
     turtle_setangle(270)
-    rect_spiral(unit_len = 20, 110, 90, thickness = 15, 
+    rect_spiral(unit_len = 20, 110, 90, thickness = 15,
         angle = 80, start_hole = TRUE)
 })
 ```
 
-<img src="man/figures/rect-spiral-1.png" title="plot of chunk rect-spiral" alt="plot of chunk rect-spiral" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/rect-spiral-1.png" alt="plot of chunk rect-spiral" width="700px" height="700px" />
+<p class="caption">plot of chunk rect-spiral</p>
+</div>
 
 
 ## A double rectangular spiral
@@ -992,9 +1191,9 @@ turtle_do({
 The path spirals in, then out, joining at the center. This might be buggy.
 
 
-```r
-double_spiral <- function(unit_len, height, width, 
-    thickness = 8L, angle = 90, clockwise = TRUE, start_hole = TRUE, 
+``` r
+double_spiral <- function(unit_len, height, width,
+    thickness = 8L, angle = 90, clockwise = TRUE, start_hole = TRUE,
     color1 = "black", color2 = "black") {
     len1 <- height - thickness
     bline1 <- c(1, 2, 4)
@@ -1007,11 +1206,11 @@ double_spiral <- function(unit_len, height, width,
     } else {
         len2 <- len1 - 2 * thickness
     }
-    blocs1 <- -sample.int(n = thickness, size = 4, 
+    blocs1 <- -sample.int(n = thickness, size = 4,
         replace = TRUE)
-    blocs2 <- -sample.int(n = thickness, size = 4, 
+    blocs2 <- -sample.int(n = thickness, size = 4,
         replace = TRUE)
-    last_one <- (min(len1, len2) <= 0) || (width <= 
+    last_one <- (min(len1, len2) <= 0) || (width <=
         2 * thickness)
     if (last_one) {
         bhole2 <- c(4)
@@ -1022,27 +1221,27 @@ double_spiral <- function(unit_len, height, width,
         bhole2 <- c(bhole2, 2)
     }
     second_stripe <- ((len2 > 0) && (width > thickness))
-    
+
     if (len1 > 0) {
         turtle_col(color1)
-        parallelogram_maze(unit_len = unit_len, height = len1, 
-            width = thickness, angle = angle, start_from = "corner", 
-            clockwise = clockwise, draw_boundary = TRUE, 
-            boundary_lines = bline1, boundary_holes = bhole1, 
-            boundary_hole_locations = blocs1, end_side = ifelse(len2 > 
+        parallelogram_maze(unit_len = unit_len, height = len1,
+            width = thickness, angle = angle, start_from = "corner",
+            clockwise = clockwise, draw_boundary = TRUE,
+            boundary_lines = bline1, boundary_holes = bhole1,
+            boundary_hole_locations = blocs1, end_side = ifelse(len2 >
                 0, 3, 2))
         if (second_stripe) {
             wid2 <- min(thickness, width - thickness)
             turtle_col(color2)
-            parallelogram_maze(unit_len = unit_len, 
-                height = len2, width = wid2, angle = 180 - 
-                  angle, start_from = "corner", clockwise = !clockwise, 
-                draw_boundary = TRUE, boundary_lines = bline2, 
-                boundary_holes = bhole2, boundary_hole_locations = blocs2, 
+            parallelogram_maze(unit_len = unit_len,
+                height = len2, width = wid2, angle = 180 -
+                  angle, start_from = "corner", clockwise = !clockwise,
+                draw_boundary = TRUE, boundary_lines = bline2,
+                boundary_holes = bhole2, boundary_hole_locations = blocs2,
                 end_side = 4)
             turtle_col(color1)
-            
-            turtle_forward(unit_len * (thickness + 
+
+            turtle_forward(unit_len * (thickness +
                 wid2))
             if (clockwise) {
                 turtle_right(180 - angle)
@@ -1058,25 +1257,25 @@ double_spiral <- function(unit_len, height, width,
         }
     }
     next_height <- width
-    next_width <- ifelse(start_hole, height, height - 
+    next_width <- ifelse(start_hole, height, height -
         2 * thickness)
-    
+
     if (last_one) {
         if (second_stripe) {
-            parallelogram_maze(unit_len = unit_len, 
-                height = next_height, width = thickness, 
-                start_from = "corner", angle = 180 - 
+            parallelogram_maze(unit_len = unit_len,
+                height = next_height, width = thickness,
+                start_from = "corner", angle = 180 -
                   angle, clockwise = clockwise)
         } else {
-            parallelogram_maze(unit_len = unit_len, 
-                height = next_height, width = thickness, 
-                start_from = "corner", angle = angle, 
+            parallelogram_maze(unit_len = unit_len,
+                height = next_height, width = thickness,
+                start_from = "corner", angle = angle,
                 clockwise = !clockwise)
         }
     } else {
-        double_spiral(unit_len, height = next_height, 
-            width = next_width, thickness = thickness, 
-            angle = 180 - angle, clockwise = clockwise, 
+        double_spiral(unit_len, height = next_height,
+            width = next_width, thickness = thickness,
+            angle = 180 - angle, clockwise = clockwise,
             start_hole = FALSE, color1 = color1, color2 = color2)
     }
 }
@@ -1087,13 +1286,16 @@ turtle_hide()
 turtle_do({
     turtle_setpos(300, 50)
     turtle_setangle(0)
-    double_spiral(unit_len = 20, height = 100, width = 100, 
-        thickness = 10, angle = 80, start_hole = TRUE, 
+    double_spiral(unit_len = 20, height = 100, width = 100,
+        thickness = 10, angle = 80, start_hole = TRUE,
         color2 = "gray40")
 })
 ```
 
-<img src="man/figures/rect-double-spiral-1.png" title="plot of chunk rect-double-spiral" alt="plot of chunk rect-double-spiral" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/rect-double-spiral-1.png" alt="plot of chunk rect-double-spiral" width="700px" height="700px" />
+<p class="caption">plot of chunk rect-double-spiral</p>
+</div>
 
 
 ## A boustrophedon
@@ -1101,9 +1303,9 @@ turtle_do({
 As in ox that plods back and forth in a field.
 
 
-```r
-boustro <- function(unit_len, height, width, thickness = 8L, 
-    angle = 90, clockwise = TRUE, start_hole = TRUE, 
+``` r
+boustro <- function(unit_len, height, width, thickness = 8L,
+    angle = 90, clockwise = TRUE, start_hole = TRUE,
     balance = 0) {
     if (start_hole) {
         bholes <- c(1, 3)
@@ -1112,20 +1314,20 @@ boustro <- function(unit_len, height, width, thickness = 8L,
         bholes <- c(1, 3)
         blines <- 2:4
     }
-    
+
     last_one <- (width < thickness)
     blocs <- sample.int(n = thickness, size = 4, replace = TRUE)
-    
-    parallelogram_maze(unit_len = unit_len, height = height, 
-        width = thickness, angle = angle, balance = balance, 
-        start_from = "corner", clockwise = clockwise, 
-        draw_boundary = TRUE, boundary_lines = blines, 
-        boundary_holes = bholes, boundary_hole_locations = blocs, 
+
+    parallelogram_maze(unit_len = unit_len, height = height,
+        width = thickness, angle = angle, balance = balance,
+        start_from = "corner", clockwise = clockwise,
+        draw_boundary = TRUE, boundary_lines = blines,
+        boundary_holes = bholes, boundary_hole_locations = blocs,
         end_side = 3)
     if (!last_one) {
-        boustro(unit_len, height = height, width = width - 
-            thickness, thickness = thickness, angle = 180 - 
-            angle, clockwise = !clockwise, start_hole = FALSE, 
+        boustro(unit_len, height = height, width = width -
+            thickness, thickness = thickness, angle = 180 -
+            angle, clockwise = !clockwise, start_hole = FALSE,
             balance = balance)
     }
 }
@@ -1136,9 +1338,13 @@ turtle_hide()
 turtle_do({
     turtle_setpos(100, 50)
     turtle_setangle(0)
-    boustro(unit_len = 26, height = 82, width = 80, 
+    boustro(unit_len = 26, height = 82, width = 80,
         thickness = 8, angle = 85, balance = 1.5)
 })
 ```
 
-<img src="man/figures/rect-boustrophedon-1.png" title="plot of chunk rect-boustrophedon" alt="plot of chunk rect-boustrophedon" width="700px" height="700px" />
+<div class="figure">
+<img src="man/figures/rect-boustrophedon-1.png" alt="plot of chunk rect-boustrophedon" width="700px" height="700px" />
+<p class="caption">plot of chunk rect-boustrophedon</p>
+</div>
+

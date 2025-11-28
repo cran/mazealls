@@ -4,10 +4,19 @@
 \alias{koch_maze}
 \title{koch_maze .}
 \usage{
-koch_maze(depth, unit_len, clockwise = TRUE, draw_boundary = TRUE,
-  num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL, boundary_hole_locations = NULL,
-  boundary_hole_arrows = FALSE, end_side = 1)
+koch_maze(
+  depth,
+  unit_len,
+  clockwise = TRUE,
+  draw_boundary = TRUE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the side length.
@@ -82,7 +91,7 @@ The triangular part has sides consisting of \code{3^depth} segments
 of length \code{unit_len}.
 
 \if{html}{
-\figure{koch-flake-1.png}{options: width="100\%" alt="Figure: Koch snowflake"}
+\figure{koch-flake-1.png}{options: style="width: 100\%;" alt="Figure: Koch snowflake"}
 }
 \if{latex}{
 \figure{koch-flake-1.png}{options: width=7cm}

@@ -4,12 +4,22 @@
 \alias{iso_trapezoid_maze}
 \title{iso_trapezoid_maze .}
 \usage{
-iso_trapezoid_maze(depth, unit_len = 4L, clockwise = TRUE,
-  start_from = c("midpoint", "corner"), method = c("four_trapezoids",
-  "one_ear", "random"), boustro = c(1, 1), draw_boundary = FALSE,
-  num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL, boundary_hole_locations = NULL,
-  boundary_hole_arrows = FALSE, end_side = 1)
+iso_trapezoid_maze(
+  depth,
+  unit_len = 4L,
+  clockwise = TRUE,
+  start_from = c("midpoint", "corner"),
+  method = c("four_trapezoids", "one_ear", "random"),
+  boustro = c(1, 1),
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the
@@ -121,7 +131,7 @@ A number of different methods are supported.
 For \code{method='four_trapezoids'}:
 
 \if{html}{
-\figure{trap-four-1.png}{options: width="100\%" alt="Figure: four trapezoids"}
+\figure{trap-four-1.png}{options: style="width: 100\%;" alt="Figure: four trapezoids"}
 }
 \if{latex}{
 \figure{trap-four-1.png}{options: width=7cm}
@@ -130,7 +140,7 @@ For \code{method='four_trapezoids'}:
 For \code{method='one_ear'}:
 
 \if{html}{
-\figure{trap-ear-1.png}{options: width="100\%" alt="Figure: one ear"}
+\figure{trap-ear-1.png}{options: style="width: 100\%;" alt="Figure: one ear"}
 }
 \if{latex}{
 \figure{trap-ear-1.png}{options: width=7cm}

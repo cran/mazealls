@@ -4,12 +4,21 @@
 \alias{dodecagon_maze}
 \title{dodecagon_maze .}
 \usage{
-dodecagon_maze(depth, unit_len = 4L, clockwise = TRUE,
-  start_from = c("midpoint", "corner"), method = c("hex_ring"),
-  draw_boundary = FALSE, num_boundary_holes = 2, boundary_lines = TRUE,
-  boundary_holes = NULL, boundary_hole_color = NULL,
-  boundary_hole_locations = NULL, boundary_hole_arrows = FALSE,
-  end_side = 1)
+dodecagon_maze(
+  depth,
+  unit_len = 4L,
+  clockwise = TRUE,
+  start_from = c("midpoint", "corner"),
+  method = c("hex_ring"),
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the side length.}
@@ -90,7 +99,7 @@ Draws a maze in a regular dodecagon. Currently dissects the maze
 into a hexagon and a ring of squares and equilateral triangles.
 
 \if{html}{
-\figure{simple-dodecagon-1.png}{options: width="100\%" alt="Figure: hex ring dodecagon"}
+\figure{simple-dodecagon-1.png}{options: style="width: 100\%;" alt="Figure: hex ring dodecagon"}
 }
 \if{latex}{
 \figure{simple-dodecagon-1.png}{options: width=7cm}

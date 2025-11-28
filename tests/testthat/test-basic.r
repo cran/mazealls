@@ -1,20 +1,20 @@
-# Copyright 2016 Steven E. Pav. All Rights Reserved.
+# Copyright 2017 Steven E. Pav. All Rights Reserved.
 # Author: Steven E. Pav
 
-# This file is part of fromo.
+# This file is part of mazealls.
 #
-# fromo is free software: you can redistribute it and/or modify
+# mazealls is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Lesser General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# fromo is distributed in the hope that it will be useful,
+# mazealls is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License for more details.
 #
 # You should have received a copy of the GNU Lesser General Public License
-# along with fromo.  If not, see <http://www.gnu.org/licenses/>.
+# along with mazealls.  If not, see <http://www.gnu.org/licenses/>.
 
 # env var:
 # nb: 
@@ -22,8 +22,8 @@
 # todo:
 # changelog: 
 #
-# Created: 2016.03.25
-# Copyright: Steven E. Pav, 2016-2016
+# Created: 2017.07.03
+# Copyright: Steven E. Pav, 2017-2017
 # Author: Steven E. Pav
 # Comments: Steven E. Pav
 
@@ -312,9 +312,9 @@ test_that("2ngons",{#FOLDUP
 		turtle_setpos(1250,1250)
 		turtle_setangle(0)
 		for (clockwise in c(TRUE,FALSE)) {
-			octagon_maze(unit_len=10,log2(48),clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,5))
-			decagon_maze(5,21,clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,6))
-			dodecagon_maze(depth=log2(14),unit_len=10,clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,7))
+			octagon_maze(unit_len=10,log2(48),clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,5),end_side=2)
+			decagon_maze(5,21,clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,6),end_side=3)
+			dodecagon_maze(depth=log2(14),unit_len=10,clockwise=clockwise,draw_boundary=TRUE,boundary_holes=c(1,7),end_side=4)
 		}
 	})
 
@@ -336,7 +336,7 @@ test_that("sierpinskis",{#FOLDUP
 		turtle_setpos(1250,1250)
 		turtle_setangle(0)
 		for (clockwise in c(TRUE,FALSE)) {
-			sierpinski_maze(unit_len=5,depth=3,clockwise=clockwise,draw_boundary=TRUE)
+			sierpinski_maze(unit_len=5,depth=3,clockwise=clockwise,draw_boundary=TRUE,end_side=2)
 			sierpinski_maze(unit_len=5,depth=3,clockwise=clockwise,style='hexaflake',draw_boundary=TRUE)
 			sierpinski_maze(unit_len=5,depth=3,clockwise=clockwise,style='dragon_left',draw_boundary=TRUE)
 		}
@@ -413,6 +413,32 @@ test_that("test arrows ",{#FOLDUP
 		turtle_setangle(0)
 		parallelogram_maze(unit_len=10,width=25,height=25,
 											 clockwise=TRUE,draw_boundary=TRUE,boundary_hole_arrows=TRUE)
+	})
+
+	# sentinel
+	expect_true(TRUE)
+})#UNFOLD
+test_that("holey line ",{#FOLDUP
+	# travis only?
+	skip_on_cran()
+	set.char.seed("9d2ab993-7a08-46ad-868c-08a2c138223c")
+
+	library(TurtleGraphics)
+	library(mazealls)
+	turtle_init(250,250,mode='clip')
+	turtle_up()
+	turtle_hide()
+
+	turtle_do({
+		turtle_setpos(125,125)
+		turtle_setangle(0)
+		for (nnseg in c(1,5)) {
+			holey_line(unit_len=5,num_segs=nnseg,go_back=TRUE)
+			holey_line(unit_len=5,num_segs=nnseg,which_seg=1)
+			holey_line(unit_len=5,num_segs=nnseg,which_seg=-1)
+			holey_line(unit_len=5,num_segs=nnseg,hole_arrow=TRUE)
+			holey_line(unit_len=5,num_segs=nnseg,hole_color='green')
+		}
 	})
 
 	# sentinel

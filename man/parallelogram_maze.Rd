@@ -4,14 +4,27 @@
 \alias{parallelogram_maze}
 \title{parallelogram_maze .}
 \usage{
-parallelogram_maze(unit_len, height, width = height, angle = 90,
-  clockwise = TRUE, method = c("two_parallelograms", "four_parallelograms",
-  "uniform", "random"), start_from = c("midpoint", "corner"), balance = 0,
-  height_boustro = c(1, 1), width_boustro = c(1, 1),
-  draw_boundary = FALSE, num_boundary_holes = 2, boundary_lines = TRUE,
-  boundary_holes = NULL, boundary_hole_color = NULL,
-  boundary_hole_locations = NULL, boundary_hole_arrows = FALSE,
-  end_side = 1)
+parallelogram_maze(
+  unit_len,
+  height,
+  width = height,
+  angle = 90,
+  clockwise = TRUE,
+  method = c("two_parallelograms", "four_parallelograms", "uniform", "random", "hilbert"),
+  start_from = c("midpoint", "corner"),
+  hilbert_balance = 1,
+  balance = 0,
+  height_boustro = c(1, 1),
+  width_boustro = c(1, 1),
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{unit_len}{the unit length in graph coordinates. This controls
@@ -42,11 +55,16 @@ parallelogram mazes with three holey lines and one solid line between them.}
 \item{uniform}{The parallelogram maze is built as four
 parallelogram mazes with three holey lines and one solid line between them.
 Sub-mazes are chosen to be nearly equal in size.}
-\item{random}{A method is chosen uniformly at random.}
+\item{hilbert}{The parallelogram maze is built as for parallelogram mazes
+with a U-shaped connection between them.}
 }}
 
 \item{start_from}{whether to start from the midpoint of the first side
 of a maze, or from the corner facing the first side.}
+
+\item{hilbert_balance}{this is essentially the balance parameter 
+but for the \code{hilbert} method, controlling horizontal and vertical
+splits.}
 
 \item{balance}{for the \code{two_parallelograms} method, we choose whether
 to split on height or width based on a balance condition. The log odds
@@ -138,7 +156,7 @@ segments of length \code{unit_len}. The second and fourth side consist of
 \code{angle}. Here is an example maze:
 
 \if{html}{
-\figure{para-maze-1.png}{options: width="100\%" alt="Figure: parallelogram maze"}
+\figure{para-maze-1.png}{options: style="width: 100\%;" alt="Figure: parallelogram maze"}
 }
 \if{latex}{
 \figure{para-maze-1.png}{options: width=7cm}
@@ -151,7 +169,7 @@ create seven mazes created side by side with an increasing balance
 parameter:
 
 \if{html}{
-\figure{para-imbalance-fade-1.png}{options: width="100\%" alt="Figure: parallelogram maze"}
+\figure{para-imbalance-fade-1.png}{options: style="width: 100\%;" alt="Figure: parallelogram maze"}
 }
 \if{latex}{
 \figure{para-imbalance-fade-1.png}{options: width=7cm}
@@ -214,6 +232,20 @@ turtle_do({
     method='two_parallelograms', height_boustro=c(21,3),width_boustro=c(21,3),balance=-0.25,
 		 start_from='corner',draw_boundary=TRUE)
 })
+
+# a Hilbert Curve maze
+turtle_init(510,510,mode='clip')
+turtle_hide()
+turtle_up()
+turtle_do({
+ turtle_setpos(15,15)
+ turtle_setangle(0)
+ parallelogram_maze(angle=90,unit_len=10,width=48,height=48,
+    method='hilbert',hilbert_balance=3,
+    height_boustro=c(10,2),width_boustro=c(10,2),
+    boundary_holes=c(1,4),start_from='corner',boundary_hole_locations=c(1,1,1,1),draw_boundary=TRUE)
+})
+
 }
 \author{
 Steven E. Pav \email{shabbychef@gmail.com}

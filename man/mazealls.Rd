@@ -2,8 +2,8 @@
 % Please edit documentation in R/mazealls.r
 \docType{package}
 \name{mazealls}
-\alias{mazealls}
 \alias{mazealls-package}
+\alias{mazealls}
 \title{generate recursive mazes}
 \description{
 Generate recursive mazes.
@@ -33,7 +33,7 @@ of the \sQuote{hallways} of a maze. Here is an example of using different
 unit lengths in a stack of trapezoids
 
 \if{html}{
-\figure{unit-len-stack-trap-1.png}{options: width="100\%" alt="Figure: Stacked trapezoids"}
+\figure{unit-len-stack-trap-1.png}{options: style="width: 100\%;" alt="Figure: Stacked trapezoids"}
 }
 \if{latex}{
 \figure{unit-len-stack-trap-1.png}{options: width=7cm}
@@ -63,7 +63,7 @@ Arrows can optionally be drawn at the boundary holes via the
 numerical array indicating which sides should have boundary hole arrows.
 
 \if{html}{
-\figure{boundary-stuff-1.png}{options: width="100\%" alt="Figure: Boundary Examples"}
+\figure{boundary-stuff-1.png}{options: style="width: 100\%;" alt="Figure: Boundary Examples"}
 }
 \if{latex}{
 \figure{boundary-stuff-1.png}{options: width=7cm}
@@ -89,7 +89,18 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Lesser General Public License for more details.
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/shabbychef/mazealls}
+  \item Report bugs at \url{https://github.com/shabbychef/mazealls/issues}
+}
+
+}
 \author{
 Steven E. Pav \email{shabbychef@gmail.com}
+
+\strong{Maintainer}: Steven E. Pav \email{shabbychef@gmail.com} (\href{https://orcid.org/0000-0002-4197-6195}{ORCID})
+
 }
 \keyword{package}

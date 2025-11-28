@@ -39,13 +39,14 @@
 #' \code{style=='four_triangles'}:
 #'
 #' \if{html}{
-#' \figure{sierpinski-1.png}{options: width="100\%" alt="Figure: Sierpinski triangle"}
+#' \figure{sierpinski-1.png}{options: style="width: 100\%;" alt="Figure: Sierpinski triangle"}
 #' }
 #' \if{latex}{
 #' \figure{sierpinski-1.png}{options: width=7cm}
 #' }
 #'
 #' @keywords plotting
+#' @template sierpinski
 #' @template etc
 #' @template param-unitlen
 #' @template param-clockwise

@@ -4,12 +4,23 @@
 \alias{sierpinski_trapezoid_maze}
 \title{sierpinski_trapezoid_maze .}
 \usage{
-sierpinski_trapezoid_maze(depth, unit_len = 4L, clockwise = TRUE,
-  start_from = c("midpoint", "corner"), color1 = "black",
-  color2 = "gray40", flip_color_parts = 1, draw_boundary = FALSE,
-  num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL, boundary_hole_locations = NULL,
-  boundary_hole_arrows = FALSE, end_side = 1)
+sierpinski_trapezoid_maze(
+  depth,
+  unit_len = 4L,
+  clockwise = TRUE,
+  start_from = c("midpoint", "corner"),
+  color1 = "black",
+  color2 = "gray40",
+  flip_color_parts = 1,
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the
@@ -105,7 +116,7 @@ Here are mazes for different values of \code{flip_color_parts} ranging
 from 1 to 4:
 
 \if{html}{
-\figure{sierpinski-trapezoids-1.png}{options: width="100\%" alt="Figure: four kinds of Sierpinski trapezoids"}
+\figure{sierpinski-trapezoids-1.png}{options: style="width: 100\%;" alt="Figure: four kinds of Sierpinski trapezoids"}
 }
 \if{latex}{
 \figure{sierpinski-trapezoids-1.png}{options: width=7cm}
@@ -175,4 +186,5 @@ turtle_do({
 \author{
 Steven E. Pav \email{shabbychef@gmail.com}
 }
+\keyword{Sierpinski}
 \keyword{plotting}

@@ -4,12 +4,21 @@
 \alias{octagon_maze}
 \title{octagon_maze .}
 \usage{
-octagon_maze(depth, unit_len = 4L, clockwise = TRUE,
-  start_from = c("midpoint", "corner"), method = c("ammann_beenker"),
-  draw_boundary = FALSE, num_boundary_holes = 2, boundary_lines = TRUE,
-  boundary_holes = NULL, boundary_hole_color = NULL,
-  boundary_hole_locations = NULL, boundary_hole_arrows = FALSE,
-  end_side = 1)
+octagon_maze(
+  depth,
+  unit_len = 4L,
+  clockwise = TRUE,
+  start_from = c("midpoint", "corner"),
+  method = c("ammann_beenker"),
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the side length.}
@@ -88,7 +97,7 @@ of \eqn{2^{depth}} pieces of length \code{unit_len}.
 Draws a maze in a regular octagon via dissection into rhombuses.
 
 \if{html}{
-\figure{simple-octagon-1.png}{options: width="100\%" alt="Figure: Amman Beenker octagon"}
+\figure{simple-octagon-1.png}{options: style="width: 100\%;" alt="Figure: Amman Beenker octagon"}
 }
 \if{latex}{
 \figure{simple-octagon-1.png}{options: width=7cm}

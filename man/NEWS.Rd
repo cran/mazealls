@@ -9,6 +9,15 @@ News for package \sQuote{mazealls}
 \newcommand{\CRANpkg}{\href{https://cran.r-project.org/package=#1}{\pkg{#1}}}
 \newcommand{\mazealls}{\CRANpkg{mazealls}}
 }
+\section{\mazealls{} Version 0.2.1 (2025-11-26) }{
+
+\itemize{
+\item fixing figure width styling for CRAN.
+\item adding Hilbert space filling parallelogram mazes.
+\item adding Sierpinski hexagon mazes.
+}
+}
+
 \section{\mazealls{} Version 0.2.0 (2017-12-12) }{
 
 \itemize{

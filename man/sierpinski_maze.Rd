@@ -4,13 +4,24 @@
 \alias{sierpinski_maze}
 \title{sierpinski_maze .}
 \usage{
-sierpinski_maze(depth, unit_len, clockwise = TRUE,
-  start_from = c("midpoint", "corner"), method = "random",
+sierpinski_maze(
+  depth,
+  unit_len,
+  clockwise = TRUE,
+  start_from = c("midpoint", "corner"),
+  method = "random",
   style = c("four_triangles", "hexaflake", "dragon_left", "dragon_right"),
-  color1 = "black", color2 = "gray40", draw_boundary = FALSE,
-  num_boundary_holes = 2, boundary_lines = TRUE, boundary_holes = NULL,
-  boundary_hole_color = NULL, boundary_hole_locations = NULL,
-  boundary_hole_arrows = FALSE, end_side = 1)
+  color1 = "black",
+  color2 = "gray40",
+  draw_boundary = FALSE,
+  num_boundary_holes = 2,
+  boundary_lines = TRUE,
+  boundary_holes = NULL,
+  boundary_hole_color = NULL,
+  boundary_hole_locations = NULL,
+  boundary_hole_arrows = FALSE,
+  end_side = 1
+)
 }
 \arguments{
 \item{depth}{the depth of recursion. This controls the side length.
@@ -107,7 +118,7 @@ recursively. This is the traditional Sierpinski Triangle, generated when
 \code{style=='four_triangles'}:
 
 \if{html}{
-\figure{sierpinski-1.png}{options: width="100\%" alt="Figure: Sierpinski triangle"}
+\figure{sierpinski-1.png}{options: style="width: 100\%;" alt="Figure: Sierpinski triangle"}
 }
 \if{latex}{
 \figure{sierpinski-1.png}{options: width=7cm}
@@ -135,4 +146,5 @@ turtle_do({
 \author{
 Steven E. Pav \email{shabbychef@gmail.com}
 }
+\keyword{Sierpinski}
 \keyword{plotting}

@@ -44,7 +44,7 @@
 #' from 1 to 4:
 #'
 #' \if{html}{
-#' \figure{sierpinski-trapezoids-1.png}{options: width="100\%" alt="Figure: four kinds of Sierpinski trapezoids"}
+#' \figure{sierpinski-trapezoids-1.png}{options: style="width: 100\%;" alt="Figure: four kinds of Sierpinski trapezoids"}
 #' }
 #' \if{latex}{
 #' \figure{sierpinski-trapezoids-1.png}{options: width=7cm}
@@ -55,6 +55,7 @@
 #' \code{\link{sierpinski_carpet_maze}},
 #' \code{\link{sierpinski_maze}}.
 #' @keywords plotting
+#' @template sierpinski
 #' @template etc
 #' @template param-unitlen
 #' @template param-clockwise
